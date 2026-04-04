@@ -1,7 +1,7 @@
 [build-system]
 requires = ["setuptools>=61.0"]
 build-backend = "setuptools.backends.legacy:build"
-
+ 
 [project]
 name = "sre-incident-env"
 version = "0.1.0"
@@ -15,9 +15,13 @@ dependencies = [
     "pydantic>=2.0.0",
     "openai>=1.0.0",
 ]
-
+ 
 [project.optional-dependencies]
 dev = ["pytest", "httpx"]
-
+ 
+[project.scripts]
+sre-incident-env = "server.app:main"
+ 
 [tool.setuptools.packages.find]
 where = ["."]
+ 
