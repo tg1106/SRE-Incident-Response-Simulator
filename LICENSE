@@ -1,9 +1,9 @@
                     GNU AFFERO GENERAL PUBLIC LICENSE
                        Version 3, 19 November 2007
 
-Copyright (C) 2026 [YOUR FULL NAME]
+Copyright (C) 2026 Tharun Gopinath
 Project: SRE Incident Response Environment
-Contact: [YOUR EMAIL]
+Contact: tharungopinath6@gmail.com
 
 Everyone is permitted to copy and distribute verbatim copies of this
 license document, but changing it is not allowed.
@@ -13,9 +13,9 @@ Any use of this software, in whole or in part, in any project,
 product, research, publication, or service — must cite the original
 work as follows:
 
-    [YOUR FULL NAME]. "SRE Incident Response Environment."
+    Tharun Gopinath. "SRE Incident Response Environment."
     Multi-Agent OpenEnv Environment. 2026.
-    https://github.com/[YOUR_GITHUB_USERNAME]/sre-incident-env
+    https://github.com/tg1106/SRE-Incident-Response-Simulator
 
 This citation requirement applies even if only a small portion of
 this code is used or adapted.

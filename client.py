@@ -1,4 +1,12 @@
 """
+# -----------------------------------------------------------------------
+# Copyright (C) 2026 Tharun Gopinath
+# Project : SRE Incident Response Environment
+# License : GNU Affero General Public License v3 (AGPL-3.0)
+# Citation: Tharun Gopinath. "SRE Incident Response Environment." 2026.
+#            https://github.com/tg1106/SRE-Incident-Response-Simulator
+# Any use of this code, in whole or in part, must retain this header.
+# -----------------------------------------------------------------------
 client.py — HTTP Client for SRE Incident Response Environment
 Connects to the FastAPI server running in Docker / HF Space.
 """
