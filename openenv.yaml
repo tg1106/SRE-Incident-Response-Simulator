@@ -1,0 +1,121 @@
+name: sre-incident-env
+version: "0.1.0"
+description: >
+  Multi-agent SRE Incident Response simulation environment.
+  Three expert agents (DevOps, Security, DBA) vote on actions
+  to resolve production incidents. Built for OpenEnv / RL training.
+
+author: team-sre
+tags:
+  - openenv
+  - sre
+  - multi-agent
+  - incident-response
+  - finance-ops
+
+tasks:
+  - id: deployment_failure
+    name: "Deployment Failure Response"
+    description: "Identify and resolve a service failure caused by a bad deployment. Clear signals, optimal path is rollback."
+    difficulty: easy
+
+  - id: db_overload
+    name: "Database Overload Response"
+    description: "Diagnose and resolve a database overload caused by a runaway batch job. Requires investigation before acting."
+    difficulty: medium
+
+  - id: ddos_attack
+    name: "DDoS Attack Response"
+    description: "Detect and mitigate a DDoS attack. Recent deployment flag is a deliberate red herring — agent must investigate."
+    difficulty: hard
+
+action_space:
+  type: discrete
+  description: "One of 6 SRE actions per step"
+  actions:
+    - id: investigate
+      description: "Investigate the incident to reveal more diagnostic information"
+    - id: restart
+      description: "Restart the affected service"
+    - id: rollback
+      description: "Revert the service to the last stable deployment"
+    - id: scale_up
+      description: "Add more compute/memory resources"
+    - id: escalate
+      description: "Escalate to a specialist team"
+    - id: resolve
+      description: "Declare the incident resolved (only valid when error_rate < 0.25)"
+
+observation_space:
+  type: dict
+  fields:
+    - name: incident_type
+      type: string
+    - name: affected_service
+      type: string
+    - name: severity
+      type: string
+    - name: error_rate
+      type: float
+      range: [0.0, 1.0]
+    - name: latency_ms
+      type: float
+    - name: cpu_usage
+      type: float
+      range: [0.0, 1.0]
+    - name: memory_usage
+      type: float
+      range: [0.0, 1.0]
+    - name: users_impacted
+      type: integer
+    - name: time_elapsed
+      type: integer
+    - name: max_steps
+      type: integer
+    - name: recent_deployment
+      type: boolean
+    - name: traffic_spike
+      type: boolean
+    - name: db_connection_errors
+      type: boolean
+    - name: expert_recommendation
+      type: string
+      description: "Weighted vote result from 3 anonymous expert agents"
+    - name: last_action
+      type: string
+      nullable: true
+    - name: last_action_result
+      type: string
+      nullable: true
+    - name: last_action_error
+      type: string
+      nullable: true
+    - name: resolved
+      type: boolean
+
+reward:
+  type: float
+  range: [0.0, 1.0]
+  description: >
+    Partial reward at every step.
+    Resolution bonus + speed bonus for correct resolution.
+    Small penalty for invalid or contextually wrong actions.
+
+episode:
+  max_steps: 10
+  termination:
+    - "Incident resolved (resolved=true)"
+    - "Max steps reached (step >= 10)"
+
+server:
+  port: 7860
+  endpoints:
+    - method: POST
+      path: /reset
+      description: "Reset environment, start new episode"
+    - method: POST
+      path: /step
+      description: "Take one action step"
+    - method: GET
+      path: /state
+      description: "Get current episode metadata"

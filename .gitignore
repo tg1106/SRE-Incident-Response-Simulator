@@ -1,0 +1,40 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+dist/
+build/
+*.egg
+
+# Environment variables — NEVER commit these
+.env
+.env.*
+
+# Virtual environments
+venv/
+.venv/
+env/
+
+# OpenEnv runtime outputs
+outputs/
+outputs/logs/
+outputs/evals/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Docker
+*.tar
+
+# Pytest
+.pytest_cache/
