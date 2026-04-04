@@ -194,7 +194,7 @@ sre_incident_env/
 
 ---
 
-# Copyright (C) 2026 Tharun Gopinath
+## Copyright (C) 2026 Tharun Gopinath
 - Project : SRE Incident Response Environment
 - License : GNU Affero General Public License v3 (AGPL-3.0)
 - Citation: Tharun Gopinath. "SRE Incident Response Environment." 2026.
