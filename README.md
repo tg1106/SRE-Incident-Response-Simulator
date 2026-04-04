@@ -447,12 +447,6 @@ Copyright (C) 2026 Tharun Gopinath
 
 This project is licensed under the **GNU Affero General Public License v3.0 (AGPL-3.0)**.
 
-This means:
-- ✅ Anyone can use, study, and modify this code freely
-- ✅ Modifications must be published openly — including when used as a hosted service
-- ❌ Cannot be used in closed-source products without publishing changes
-- ✅ Must cite the original work in all cases
-
 **If you use this work in any form — research, product, service, or project — you must cite it as:**
 
 ```
