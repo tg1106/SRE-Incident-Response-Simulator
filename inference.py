@@ -19,6 +19,8 @@ Mandatory stdout format:
 import os
 import sys
 from typing import List, Optional
+from dotenv import load_dotenv
+load_dotenv()
 
 from openai import OpenAI
 
@@ -42,23 +44,26 @@ VALID_ACTIONS = [
     "investigate", "restart", "rollback", "scale_up", "escalate", "resolve"
 ]
 
-SYSTEM_PROMPT = """You are an expert SRE (Site Reliability Engineer) responding to a live production incident.
+SYSTEM_PROMPT = """You are an expert SRE (Site Reliability Engineer) responding to a live production incident. Every wasted step costs lives and revenue.
 
-At each step you receive the current incident state. Choose exactly ONE action from:
-  investigate  — look deeper to identify root cause
+At each step choose exactly ONE action from:
+  investigate  — reveal root cause (use ONCE at most)
   restart      — restart the affected service
-  rollback     — revert to the last stable deployment
-  scale_up     — add more compute/memory resources
+  rollback     — revert to last stable deployment
+  scale_up     — add compute/memory resources
   escalate     — bring in a specialist team
-  resolve      — declare the incident resolved (ONLY when error_rate is very low)
+  resolve      — declare incident resolved
 
-Rules:
-- Read ALL metrics and signals carefully before acting
-- The expert_recommendation is your multi-agent panel hint — use it
-- Only call 'resolve' when error_rate is clearly below 0.25
-- Respond with ONLY the single action word. No explanation. No punctuation.
+STRICT RULES:
+- NEVER repeat the same action twice in a row
+- NEVER call investigate more than once per episode
+- Read expert_recommendation carefully — follow it
+- If error_rate is below 0.25 → call resolve IMMEDIATELY
+- If last_action_result mentions recovery or improvement → call resolve next
+- Aim to resolve in 3 steps or fewer
+- Think: what is the ONE action that fixes this fastest?
 
-Example response: rollback"""
+Respond with ONLY the single action word. Nothing else."""
 
 
 # ── Logging helpers (STRICT FORMAT — do not modify) ──────────────────────────
