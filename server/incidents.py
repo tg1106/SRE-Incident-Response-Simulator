@@ -255,26 +255,26 @@ def grade_episode(
     """
     if task == "deployment_failure":
         if resolved:
-            if steps_taken <= 2:   return 1.00
+            if steps_taken <= 2:   return 0.95
             if steps_taken <= 4:   return 0.85
             if steps_taken <= 7:   return 0.65
             return 0.45
-        return round(max(0.0, (1.0 - final_error_rate) * 0.30), 2)
+        return round(max(0.05, (1.0 - final_error_rate) * 0.30), 2)
 
     if task == "db_overload":
         if resolved:
-            if steps_taken <= 3:   return 1.00
+            if steps_taken <= 3:   return 0.95
             if steps_taken <= 5:   return 0.80
             if steps_taken <= 8:   return 0.60
             return 0.40
-        return round(max(0.0, (1.0 - final_error_rate) * 0.25), 2)
+        return round(max(0.05, (1.0 - final_error_rate) * 0.25), 2)
 
     if task == "ddos_attack":
         if resolved:
-            if steps_taken <= 3:   return 1.00
+            if steps_taken <= 3:   return 0.95
             if steps_taken <= 5:   return 0.75
             if steps_taken <= 8:   return 0.55
             return 0.35
-        return round(max(0.0, (1.0 - final_error_rate) * 0.20), 2)
+        return round(max(0.05, (1.0 - final_error_rate) * 0.20), 2)
 
     return 0.0

@@ -82,12 +82,8 @@ def log_step(step: int, action: str, reward: float, done: bool, error: Optional[
 
 def log_end(success: bool, steps: int, score: float, rewards: List[float]) -> None:
     rewards_str = ",".join(f"{r:.2f}" for r in rewards)
-
-    # 🔥 FIX: clean output for 0 and 1
-    score_out = int(score) if score in (0.0, 1.0) else round(score, 3)
-
     print(
-        f"[END] success={str(success).lower()} steps={steps} score={score_out} rewards={rewards_str}",
+        f"[END] success={str(success).lower()} steps={steps} score={score:.3f} rewards={rewards_str}",
         flush=True,
     )
 
@@ -157,7 +153,7 @@ def run_task(client: OpenAI, env: SREEnvironment, task: str) -> None:
     success:     bool        = False
 
     try:
-        obs = env.reset(task=task).dict()
+        obs = env.reset(task=task).model_dump()
 
         for step in range(1, MAX_STEPS + 1):
             if obs.get("resolved", False):
@@ -191,7 +187,7 @@ def run_task(client: OpenAI, env: SREEnvironment, task: str) -> None:
                 obs.get("error_rate", 1.0),
             )
 
-        score   = round(min(max(float(score), 0.0), 1.0), 3)
+        score = round(min(max(float(score), 0.001), 0.999), 3)
         success = score >= SUCCESS_THRESHOLD
 
     except Exception as exc:
