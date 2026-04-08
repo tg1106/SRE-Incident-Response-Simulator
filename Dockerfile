@@ -1,7 +1,7 @@
 # SRE Incident Response Environment — Docker Image
 # Runs FastAPI server on port 7860 (HuggingFace Spaces standard)
 
-FROM python:3.11
+FROM python:3.11-slim
 
 WORKDIR /app
 

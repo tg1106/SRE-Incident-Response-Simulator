@@ -24,7 +24,6 @@ load_dotenv()
 
 from openai import OpenAI
 
-# Direct import — environment runs in-process (no server needed for inference)
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from server.environment import SREEnvironment
 from models import SREAction
@@ -32,7 +31,7 @@ from models import SREAction
 # ── Mandatory environment variables ──────────────────────────────────────────
 API_BASE_URL = os.getenv("API_BASE_URL", "https://router.huggingface.co/v1")
 MODEL_NAME   = os.getenv("MODEL_NAME",   "Qwen/Qwen2.5-72B-Instruct")
-HF_TOKEN     = os.getenv("HF_TOKEN")    # No default — must be set externally
+HF_TOKEN     = os.getenv("HF_TOKEN")
 
 # ── Constants ─────────────────────────────────────────────────────────────────
 BENCHMARK         = "sre-incident-env"
@@ -66,7 +65,7 @@ STRICT RULES:
 Respond with ONLY the single action word. Nothing else."""
 
 
-# ── Logging helpers (STRICT FORMAT — do not modify) ──────────────────────────
+# ── Logging helpers ──────────────────────────────────────────────────────────
 
 def log_start(task: str, env: str, model: str) -> None:
     print(f"[START] task={task} env={env} model={model}", flush=True)
@@ -83,8 +82,12 @@ def log_step(step: int, action: str, reward: float, done: bool, error: Optional[
 
 def log_end(success: bool, steps: int, score: float, rewards: List[float]) -> None:
     rewards_str = ",".join(f"{r:.2f}" for r in rewards)
+
+    # 🔥 FIX: clean output for 0 and 1
+    score_out = int(score) if score in (0.0, 1.0) else round(score, 3)
+
     print(
-        f"[END] success={str(success).lower()} steps={steps} score={score:.3f} rewards={rewards_str}",
+        f"[END] success={str(success).lower()} steps={steps} score={score_out} rewards={rewards_str}",
         flush=True,
     )
 
@@ -175,12 +178,10 @@ def run_task(client: OpenAI, env: SREEnvironment, task: str) -> None:
             log_step(step=step, action=action, reward=reward, done=done, error=error)
 
             if done:
-                # Use grader score if available
                 if info.get("grade") is not None:
                     score = float(info["grade"])
                 break
 
-        # Fallback: compute score from final state
         if score == 0.0:
             from server.incidents import grade_episode
             score = grade_episode(
