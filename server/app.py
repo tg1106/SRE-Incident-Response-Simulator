@@ -28,6 +28,25 @@ app = FastAPI(
     description="Multi-agent SRE Incident Response OpenEnv Environment",
     version="0.1.0",
 )
+
+@app.get("/")
+def root():
+    return {
+        "name": "SRE Incident Response Environment",
+        "status": "running",
+        "version": "0.1.0",
+        "endpoints": {
+            "reset": "POST /reset",
+            "step":  "POST /step",
+            "state": "GET  /state",
+            "health":"GET  /health"
+        },
+        "tasks": [
+            "deployment_failure",
+            "db_overload",
+            "ddos_attack"
+        ]
+    }
  
 VALID_TASKS = {"deployment_failure", "db_overload", "ddos_attack"}
  
